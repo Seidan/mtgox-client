@@ -10,16 +10,29 @@ class Mtgox_Api
 {
     const API_INFO = '1/generic/private/info';
 
+    private $apiKey;
+    private $apiSecret;
+
+    /**
+     * Constructor
+     *
+     * @param string $apiKey
+     * @param string $apiSecret
+     */
+    public function __construct($apiKey, $apiSecret)
+    {
+        $this->apiKey = $apiKey;
+        $this->apiSecrt = $apiSecret;
+    }
+
     /**
      * Check if the connection to the api works
      *
-     * @param string $key apiKey
-     * @param string $secret mtgox secret key
      * @return boolean
      */
-    public function checkConnection($key, $secret)
+    public function checkConnection()
     {
-        $response = $this->mtgoxQuery(self::API_INFO, $key, $secret);
+        $response = $this->query(self::API_INFO, $this->apiKey, $this->apiSecret);
 
         return $response['result'] === 'success';
     }
@@ -30,22 +43,19 @@ class Mtgox_Api
      * @staticvar null $ch
      *
      * @param string $path   api path
-     * @param string $key    api key
-     * @param string $secret secret key
      * @param array  $req    parameters data
-     *
      * @return array
      * @throws Exception
      */
-    public function mtgoxQuery($path, $key, $secret, array $req = array())
+    public function mtgoxQuery($path, array $req = array())
     {
         $mt = explode(' ', microtime());
         $req['nonce'] = $mt[1] . substr($mt[0], 2, 6);
         $postData = http_build_query($req, '', '&');
         $headers = array(
-            'Rest-Key: ' . $key,
+            'Rest-Key: ' . $this->apiKey,
             'Rest-Sign: ' . base64_encode(
-                hash_hmac('sha512', $postData, base64_decode($secret), TRUE)
+                hash_hmac('sha512', $postData, base64_decode($this->apiSecret), TRUE)
              ),
         );
 
