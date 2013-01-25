@@ -21,9 +21,19 @@ class Mtgox_Merchant
      * @param $apiKey       Public Key for the MtGox Api
      * @param $apiSecret    Secret Key for the MtGox Api
      */
-    public __construct($apiKey, $apiSecret)
+    public function __construct($apiKey, $apiSecret)
     {
         $this->api = new Mtgox_Api($apiKey, $apiSecret);
+    }
+
+    /**
+     * Get API object
+     *
+     * @return Mtgox_Api instance
+     */
+    public function getApi()
+    {
+        return $this->api;
     }
 
     /**

@@ -22,7 +22,7 @@ class Mtgox_Api
     public function __construct($apiKey, $apiSecret)
     {
         $this->apiKey = $apiKey;
-        $this->apiSecrt = $apiSecret;
+        $this->apiSecret = $apiSecret;
     }
 
     /**
@@ -32,7 +32,8 @@ class Mtgox_Api
      */
     public function checkConnection()
     {
-        $response = $this->query(self::API_INFO, $this->apiKey, $this->apiSecret);
+        $response = $this->query(self::API_INFO);
+        var_dump($response);die;
 
         return $response['result'] === 'success';
     }
@@ -47,7 +48,7 @@ class Mtgox_Api
      * @return array
      * @throws Exception
      */
-    public function mtgoxQuery($path, array $req = array())
+    public function query($path, $req = array())
     {
         $mt = explode(' ', microtime());
         $req['nonce'] = $mt[1] . substr($mt[0], 2, 6);

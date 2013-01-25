@@ -11,7 +11,6 @@ class Mtgox_Response
 {
     private $secretKey;
 
-
     /**
      * Constructor
      *
@@ -34,6 +33,7 @@ class Mtgox_Response
         );
 
         $clientSign = base64_decode($_SERVER['HTTP_REST_SIGN']);
+
         if ($sign == $clientSign) {
 
             return true;
